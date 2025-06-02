@@ -1,4 +1,8 @@
 import inquirer
+import developer
+
+
+print(developer.developer())
 
 def ask_language():
     questions = [
@@ -9,37 +13,57 @@ def ask_language():
     answers = inquirer.prompt(questions)
     return answers['language']
 
-def ask_model_name():
-    questions = [
-        inquirer.Text('model_name', message="Enter model name")
-    ]
-    answers = inquirer.prompt(questions)
-    return answers['model_name']
-
-def ask_attributes():
-    attributes = []
+def ask_model_names():
+    model_names = []
+    print('Enter model name for each one >>>>')
     while True:
         questions = [
-            inquirer.Text('attr', message="Enter attribute (name:type) or leave blank to finish")
+            inquirer.Text('model_name', message="Enter model name (leave blank to finish)")
         ]
         answers = inquirer.prompt(questions)
-        attr = answers['attr']
-        if not attr:
+        name = answers['model_name'].strip()
+        if not name:
             break
-        if ':' not in attr:
-            print("Invalid format, use name:type (e.g., email:String)")
-            continue
-        attributes.append(attr)
-    return attributes
+        model_names.append(name)
+    return model_names
+
+
+def ask_attributes(models):
+    model_attributes = {}
+
+    for model in models:
+        print(f"\nEnter attributes for model: {model}")
+        print('if you want a reference to other collection you can write: userId: ref_to_users')
+        attributes = []
+        while True:
+            questions = [
+                inquirer.Text('attr', message="Enter attribute (name:type) or leave blank to finish")
+            ]
+            answers = inquirer.prompt(questions)
+            attr = answers['attr'].strip()
+            if not attr:
+                break
+            if ':' not in attr:
+                print("Invalid format, use name:type (e.g., email:String)")
+                continue
+            attributes.append(attr)
+        model_attributes[model] = attributes
+
+    return model_attributes
+
 
 def main():
     language = ask_language()
-    model_name = ask_model_name()
-    attributes = ask_attributes()
+    model_names = ask_model_names()
+    model_attributes = ask_attributes(model_names)
     print(f"Language: {language}")
-    print(f"Model: {model_name}")
-    print(f"Attributes: {attributes}")
-    return language, model_name, attributes
+    print(f"Models: {model_names}")
+    print("Model Attributes:")
+    for model, attrs in model_attributes.items():
+        print(f"  {model}: {attrs}")
+
+    return language, model_names, model_attributes
+
 
 if __name__ == "__main__":
     main()
