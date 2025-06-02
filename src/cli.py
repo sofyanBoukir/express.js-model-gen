@@ -1,6 +1,6 @@
 import inquirer
 import developer
-
+from ai_client import askAi
 
 print(developer.developer())
 
@@ -33,7 +33,7 @@ def ask_attributes(models):
 
     for model in models:
         print(f"\nEnter attributes for model: {model}")
-        print('if you want a reference to other collection you can write: userId: ref_to_users')
+        print('if you want a reference to other collection you can write for ex.: userId: ref_to_users')
         attributes = []
         while True:
             questions = [
@@ -56,14 +56,21 @@ def main():
     language = ask_language()
     model_names = ask_model_names()
     model_attributes = ask_attributes(model_names)
-    print(f"Language: {language}")
-    print(f"Models: {model_names}")
-    print("Model Attributes:")
-    for model, attrs in model_attributes.items():
-        print(f"  {model}: {attrs}")
+
+    if(len(model_names) == 0):
+        print('BYEEE!!')
+        return
+    # print(f"Language: {language}")
+    # print(f"Models: {model_names}")
+    # print("Model Attributes:")
+    # for model, attrs in model_attributes.items():
+    #     print(f"  {model}: {attrs}")
+
+    for modelAttrs in model_attributes:
+        responseFromAI = askAi(language=language,model_attributes=modelAttrs)
+        print(responseFromAI)
 
     return language, model_names, model_attributes
 
 
-if __name__ == "__main__":
-    main()
+main()
