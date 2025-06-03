@@ -3,6 +3,7 @@ from developer import developer
 from ai import askAi
 import os
 import sys
+from resultPath import createFileInDir
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.paths import askForPath
@@ -18,12 +19,17 @@ if(len(modelNames) == 0):
     exit()
 
 path = askForPath()
-print('your path provided is: ',path)
+folderToStoreResults = createFileInDir(path)
+
+languages = {
+    'javascript' : 'js',
+    'typescript' : 'ts',
+}
 
 for modelAttr, modelName in zip(modelAttributes, modelNames):
-    # response = askAi(language, modelAttr, modelName)
-    print(f"{modelName=}, {modelAttr=}")
+    print('Asking ai.....')
+    response = askAi(language, modelAttr)
 
-# for modelAttr in modelAttributes:
-#     # response = askAi(language,modelAttr)
-#     # print(response)
+    file_path = os.path.join(folderToStoreResults, f"{modelName}.model.{languages[language.lower()]}")
+    with open(file_path, 'w') as f:
+        f.write(response)
