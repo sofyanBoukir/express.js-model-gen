@@ -1,19 +1,15 @@
 import inquirer
-import developer
-from ai_client import askAi
 
-print(developer.developer())
 
-def ask_language():
-    questions = [
-        inquirer.List('language',
-                      message="Choose language",
-                      choices=['JavaScript', 'TypeScript'])
-    ]
-    answers = inquirer.prompt(questions)
-    return answers['language']
+def askForLanguage():
+    while True:
+        language = input('Choose a language supported: Javascript || Typescript: ')
+        if language.lower() == 'javascript' or language.lower() == 'typescript':
+            return language.capitalize()
+        else:
+            print("Invalid choice. Please enter 'Javascript' or 'Typescript'.")
 
-def ask_model_names():
+def askForModelNames():
     model_names = []
     print('Enter model name for each one >>>>')
     while True:
@@ -27,50 +23,27 @@ def ask_model_names():
         model_names.append(name)
     return model_names
 
-
-def ask_attributes(models):
-    model_attributes = {}
+def askForAttributes(models):
+    model_attributes = []
 
     for model in models:
         print(f"\nEnter attributes for model: {model}")
-        print('if you want a reference to other collection you can write for ex.: userId: ref_to_users')
+        print('If you want a reference to another collection, you can write for example: userId: ref_to_users')
         attributes = []
         while True:
             questions = [
-                inquirer.Text('attr', message="Enter attribute (name:type) or leave blank to finish")
+                inquirer.Text('attr', message="Enter attribute or press Enter to finish")
             ]
             answers = inquirer.prompt(questions)
             attr = answers['attr'].strip()
             if not attr:
                 break
-            if ':' not in attr:
-                print("Invalid format, use name:type (e.g., email:String)")
-                continue
             attributes.append(attr)
-        model_attributes[model] = attributes
+
+        model_attributes.append({
+            "model": model,
+            "attributes": attributes
+        })
 
     return model_attributes
 
-
-def main():
-    language = ask_language()
-    model_names = ask_model_names()
-    model_attributes = ask_attributes(model_names)
-
-    if(len(model_names) == 0):
-        print('BYEEE!!')
-        return
-    # print(f"Language: {language}")
-    # print(f"Models: {model_names}")
-    # print("Model Attributes:")
-    # for model, attrs in model_attributes.items():
-    #     print(f"  {model}: {attrs}")
-
-    for modelAttrs in model_attributes:
-        responseFromAI = askAi(language=language,model_attributes=modelAttrs)
-        print(responseFromAI)
-
-    return language, model_names, model_attributes
-
-
-main()

@@ -1,7 +1,11 @@
 from together import Together
 from dotenv import load_dotenv
-from utils.prompt import promptToAi
 import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.prompt import promptToAi
+
 
 load_dotenv()
 
