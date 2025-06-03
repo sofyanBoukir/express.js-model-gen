@@ -7,8 +7,10 @@ from resultPath import createFileInDir
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.paths import askForPath
+from help.main import showHelp
 
 developer()
+showHelp()
 
 language = askForLanguage()
 modelNames = askForModelNames()
