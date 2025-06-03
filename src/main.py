@@ -12,11 +12,12 @@ from help.main import showHelp
 developer()
 showHelp()
 
+
 language = askForLanguage()
 modelNames = askForModelNames()
 modelAttributes = askForAttributes(modelNames)
 
-if(len(modelNames) == 0):
+if(len(modelNames) == 0 or len(modelAttributes) == 0):
     print('BYEE!!!')
     exit()
 
